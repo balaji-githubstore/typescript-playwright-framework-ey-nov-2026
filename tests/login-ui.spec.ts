@@ -13,5 +13,12 @@ test.describe("openemr login UI tests",()=>{
         //get the header
         await expect(page.locator("xpath=//p[contains(text(),'most popular')]"))
         .toHaveText("The most popular open-source Electronic Health Record and Medical Practice Management solution.");
-    })
+    });
+
+    test("verify placeholder",async({page})=>{
+        await page.goto("https://demo.openemr.io/b/openemr/");
+        await expect(page.locator("xpath=//input[@id='authUser']")).toHaveAttribute("placeholder","Username");
+        await expect(page.locator("xpath=//input[@id='clearPass']")).toHaveAttribute("placeholder","Password");
+    });
+
 })
