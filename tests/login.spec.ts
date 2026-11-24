@@ -1,29 +1,31 @@
 import { test, expect } from "@playwright/test";
-import { validLoginData } from "./../utils/data-source.js"
+import { validLoginData, invalidLoginData } from "./../utils/data-source.js"
 
 
 test.describe("verify login functionality", () => {
 
-    for (let { username, password, language, expectedValue } of validLoginData) {
+    for (let { username, password, languageLabel, expectedValue } of validLoginData) {
         test(`verify valid login for ${username}`, async ({ page }) => {
             await page.goto("https://demo.openemr.io/b/openemr/");
             await page.locator("xpath=//input[@id='authUser']").fill(username);
             await page.locator("xpath=//input[@id='clearPass']").fill(password);
-            await page.locator("xpath=//select[@name='languageChoice']").selectOption({ label: language });
+            await page.locator("xpath=//select[@name='languageChoice']").selectOption({ label: languageLabel });
             await page.locator("xpath=//button[@id='login-button']").click();
             //Assert the text --> Calendar
             await expect(page.locator("xpath=//span[text()='Calendar']")).toHaveText(expectedValue);
         });
     };
 
-    test("verify invalid login", async ({ page }) => {
-        await page.goto("https://demo.openemr.io/b/openemr/")
-        await page.locator("xpath=//input[@id='authUser']").fill("john");
-        await page.locator("xpath=//input[@id='clearPass']").fill("john123");
-        await page.locator("xpath=//select[@name='languageChoice']").selectOption({ label: "English (Indian)" });
-        await page.locator("xpath=//button[@id='login-button']").click();
+    for (let { username, password, languageLabel, expectedValue } of invalidLoginData)
 
-        //Assert the error - Invalid username or password
-        await expect(page.locator("xpath=//p[contains(text(),'Invalid')]")).toHaveText("Invalid username or password");
-    });
+        test(`verify invalid login for ${username}`, async ({ page }) => {
+            await page.goto("https://demo.openemr.io/b/openemr/")
+            await page.locator("xpath=//input[@id='authUser']").fill(username);
+            await page.locator("xpath=//input[@id='clearPass']").fill(password);
+            await page.locator("xpath=//select[@name='languageChoice']").selectOption({ label: languageLabel });
+            await page.locator("xpath=//button[@id='login-button']").click();
+
+            //Assert the error - Invalid username or password
+            await expect(page.locator("xpath=//p[contains(text(),'Invalid')]")).toHaveText(expectedValue);
+        });
 });
