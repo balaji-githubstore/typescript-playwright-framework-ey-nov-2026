@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { validLoginData, invalidLoginData } from "./../utils/data-source.js"
+import { JsonUtils } from "./../utils/json-reader.js"
 
 
 test.describe("verify login functionality", () => {
 
+    const validLoginData=JsonUtils.getJsonValue("validLoginData");
     for (let { username, password, languageLabel, expectedValue } of validLoginData) {
         test(`verify valid login for ${username}`, async ({ page }) => {
             await page.goto("https://demo.openemr.io/b/openemr/");
@@ -16,6 +17,7 @@ test.describe("verify login functionality", () => {
         });
     };
 
+    const invalidLoginData=JsonUtils.getJsonValue("invalidLoginData");
     for (let { username, password, languageLabel, expectedValue } of invalidLoginData)
         test(`verify invalid login for ${username}`, async ({ page }) => {
             await page.goto("https://demo.openemr.io/b/openemr/")
