@@ -17,7 +17,6 @@ test.describe("verify login functionality", () => {
     };
 
     for (let { username, password, languageLabel, expectedValue } of invalidLoginData)
-
         test(`verify invalid login for ${username}`, async ({ page }) => {
             await page.goto("https://demo.openemr.io/b/openemr/")
             await page.locator("xpath=//input[@id='authUser']").fill(username);
