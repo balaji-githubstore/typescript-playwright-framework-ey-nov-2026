@@ -1,0 +1,30 @@
+{
+    "validLoginData": [
+        {
+            "username": "clinician",
+            "password": "clinician",
+            "languageLabel": "English (Indian)",
+            "expectedValue": "Calendar"
+        },
+        {
+            "username": "admin",
+            "password": "pass",
+            "languageLabel": "English (Indian)",
+            "expectedValue": "Calendar"
+        }
+    ],
+    "invalidLoginData": [
+        {
+            "username": "bala",
+            "password": "bala123",
+            "languageLabel": "English (Indian)",
+            "expectedValue": "Invalid username or password"
+        },
+        {
+            "username": "kim",
+            "password": "kim123",
+            "languageLabel": "English (Indian)",
+            "expectedValue": "Invalid username or password"
+        }
+    ]
+}
