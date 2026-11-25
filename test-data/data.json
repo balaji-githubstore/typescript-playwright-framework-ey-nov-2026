@@ -11,6 +11,12 @@
             "password": "pass",
             "languageLabel": "English (Indian)",
             "expectedValue": "Calendar"
+        },
+        {
+            "username": "accountant",
+            "password": "accountant",
+            "languageLabel": "English (Indian)",
+            "expectedValue": "Calendar"
         }
     ],
     "invalidLoginData": [
