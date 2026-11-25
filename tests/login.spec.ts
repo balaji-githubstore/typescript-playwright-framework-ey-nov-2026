@@ -9,6 +9,7 @@ test.describe("verify login functionality", () => {
 
     for (let { username, password, languageLabel, expectedValue } of validLoginData) {
         test(`verify valid login for ${username}`, async ({ page }) => {
+
             await page.goto("https://demo.openemr.io/b/openemr/");
 
             const loginPage = new LoginPage(page);
