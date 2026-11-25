@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { validLoginData, invalidLoginData } from "./../utils/data-source.js"
+import { LoginPage } from "../pages/login-page.js";
+import { log } from "node:console";
 
 //data driven using typescript file
 
@@ -8,10 +10,13 @@ test.describe("verify login functionality", () => {
     for (let { username, password, languageLabel, expectedValue } of validLoginData) {
         test(`verify valid login for ${username}`, async ({ page }) => {
             await page.goto("https://demo.openemr.io/b/openemr/");
-            await page.locator("xpath=//input[@id='authUser']").fill(username);
-            await page.locator("xpath=//input[@id='clearPass']").fill(password);
-            await page.locator("xpath=//select[@name='languageChoice']").selectOption({ label: languageLabel });
-            await page.locator("xpath=//button[@id='login-button']").click();
+
+            const loginPage=new LoginPage(page);
+            await loginPage.enterUsername(username);
+            await loginPage.enterPassword(password);
+            await loginPage.selectLanguageByLabel(languageLabel);
+            await loginPage.clickOnLogin();
+           
             //Assert the text --> Calendar
             await expect(page.locator("xpath=//span[text()='Calendar']")).toHaveText(expectedValue);
         });
@@ -19,13 +24,15 @@ test.describe("verify login functionality", () => {
 
     for (let { username, password, languageLabel, expectedValue } of invalidLoginData)
         test(`verify invalid login for ${username}`, async ({ page }) => {
-            await page.goto("https://demo.openemr.io/b/openemr/")
-            await page.locator("xpath=//input[@id='authUser']").fill(username);
-            await page.locator("xpath=//input[@id='clearPass']").fill(password);
-            await page.locator("xpath=//select[@name='languageChoice']").selectOption({ label: languageLabel });
-            await page.locator("xpath=//button[@id='login-button']").click();
+            await page.goto("https://demo.openemr.io/b/openemr/");
+
+            const loginPage=new LoginPage(page);
+            await loginPage.enterUsername(username);
+            await loginPage.enterPassword(password);
+            await loginPage.selectLanguageByLabel(languageLabel);
+            await loginPage.clickOnLogin();
 
             //Assert the error - Invalid username or password
-            await expect(page.locator("xpath=//p[contains(text(),'Invalid')]")).toHaveText(expectedValue);
+           await loginPage.verifyInvalidLoginError(expectedValue);
         });
 });
